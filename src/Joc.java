@@ -18,18 +18,20 @@ public class Joc {
         return torn;
     }
 
-    public void novaPartida() {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+    public void novaPartida(int midaTaulell) {
+        this.taulell = new char[midaTaulell][midaTaulell];
+        for (int i = 0; i < midaTaulell; i++) {
+            for (int j = 0; j < midaTaulell; j++) {
                 taulell[i][j] = ' ';
             }
         }
-        torn = 1;
+        torn = 1; // Inicializar el turno del jugador a 1 al comenzar una nueva partida
 
         // Bucle para el desarrollo del juego
         while (true) {
-            tui.mostrarTaulell(taulell, torn); // Mostrar el tablero actual
-            int jugada = tui.recollirJugada(); // Recoger la jugada del jugador actual
+            tui.mostrarTaulell(taulell, midaTaulell, torn);
+// Mostrar el tablero actual
+            int jugada = tui.recollirJugada(midaTaulell) -1; // Recoger la jugada del jugador actual
             int fila = jugada / 3;
             int columna = jugada % 3;
 
@@ -42,6 +44,7 @@ public class Joc {
             }
         }
     }
+
 
 
     public void jugar(int fila, int columna) {
@@ -66,7 +69,7 @@ public class Joc {
                 (taulell[0][2] == jugador && taulell[1][1] == jugador && taulell[2][0] == jugador); // Diagonal secundaria
 
         // Mostrar el tablero antes de indicar si hay un ganador o empate
-        tui.mostrarTaulell(taulell, torn);
+        tui.mostrarTaulell(taulell,3, torn);
 
         // Si hay un ganador, imprimir mensaje y devolver verdadero
         if (guanyador) {

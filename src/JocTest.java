@@ -10,14 +10,17 @@ public class JocTest {
         TUI tui = new TUI();
 
         // Act
-        joc.novaPartida();
+        joc.novaPartida(3);
         char[][] taulell = joc.getTaulell();
+        int tornActual = joc.getTorn(); // Obtener el turno actual del jugador
+        int midaTaulell = 3; // Supongamos que el tamaño del tablero es 3
 
         // Assert
         assertNotNull(taulell); // Verificar que el tablero no es nulo
 
-        // Mostrar el tablero vacío
-        tui.mostrarTaulell(taulell, joc.getTorn());
+        // Mostrar el tablero vacío junto con el turno actual del jugador
+        System.out.println("Tablero Vacío:");
+        tui.mostrarTaulell(taulell, midaTaulell, tornActual);
 
         // Verificar que todas las celdas del tablero estén vacías
         for (int i = 0; i < 3; i++) {
@@ -27,23 +30,26 @@ public class JocTest {
         }
     }
 
+
+
+
     @Test
     public void testJugar() {
         // Arrange
         Joc joc = new Joc();
-        joc.novaPartida();
+        joc.novaPartida(3); // Iniciar una nueva partida con un tablero de 3x3
         TUI tui = new TUI();
 
         // Act & Assert
-        tui.mostrarTaulell(joc.getTaulell(), joc.getTorn()); // Mostrar el tablero inicial
+        tui.mostrarTaulell(joc.getTaulell(), 3, joc.getTorn()); // Mostrar el tablero inicial
         joc.jugar(0, 0); // Jugador 1
-        tui.mostrarTaulell(joc.getTaulell(), joc.getTorn()); // Mostrar el tablero después de la jugada
+        tui.mostrarTaulell(joc.getTaulell(), 3, joc.getTorn()); // Mostrar el tablero después de la jugada
         assertEquals('X', joc.getTaulell()[0][0]); // Verificar que se colocó una ficha X en la posición (0, 0)
         assertEquals(2, joc.getTorn()); // Verificar que el turno cambió al jugador 2
 
         // Act & Assert
         joc.jugar(1, 0); // Jugador 2
-        tui.mostrarTaulell(joc.getTaulell(), joc.getTorn()); // Mostrar el tablero después de la segunda jugada
+        tui.mostrarTaulell(joc.getTaulell(), 3, joc.getTorn()); // Mostrar el tablero después de la segunda jugada
         assertEquals('O', joc.getTaulell()[1][0]); // Verificar que se colocó una ficha O en la posición (1, 0)
         assertEquals(1, joc.getTorn()); // Verificar que el turno cambió al jugador 1
     }
