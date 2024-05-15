@@ -23,30 +23,7 @@ public class TUI {
         return opcion;
     }
 
-    public static int recollirNovaMidaTaulell() {
-        Scanner sc = new Scanner(System.in);
 
-        System.out.println("Modificación de la medida del tablero:");
-        System.out.print("Introduce la nueva medida del tablero (entre 3 y 10, -1 para volver): ");
-
-        while (true) {
-            if (sc.hasNextInt()) {
-                int novaMida = sc.nextInt();
-                if (novaMida == -1) {
-                    return -1;
-                } else if (novaMida < 3 || novaMida > 10) {
-                    System.out.println("Error: La nueva medida del tablero debe estar entre 3 y 10.");
-                    System.out.print("Introduce la nueva medida del tablero (entre 3 y 10, -1 para volver): ");
-                } else {
-                    return novaMida;
-                }
-            } else {
-                System.out.println("Error: Debes ingresar un número entero.");
-                System.out.print("Introduce la nueva medida del tablero (entre 3 y 10, -1 para volver): ");
-                sc.next(); // Limpiar el buffer del Scanner
-            }
-        }
-    }
 
     public void mostrarTaulell(char[][] taulell, int midaTaulell, int torn) {
         System.out.println("Tablero:");
@@ -70,11 +47,11 @@ public class TUI {
         System.out.print("Columna (1-" + midaTaulell + "): ");
         int columna = sc.nextInt();
 
-        // Ajustar las filas y columnas de 1-5 a 0-4
+        // Ajustar las filas y columnas de 1-midaTaulell a 0-(midaTaulell-1)
         fila--;
         columna--;
 
-        // Validar que la fila y la columna estén dentro del rango permitido (0-midaTaulell-1)
+        // Validar que la fila y la columna estén dentro del rango permitido (0-(midaTaulell-1))
         if (fila < 0 || fila >= midaTaulell || columna < 0 || columna >= midaTaulell) {
             System.out.println("Fila o columna inválida. Inténtalo de nuevo.");
             return recollirJugada(midaTaulell); // Llamada recursiva para obtener una jugada válida
@@ -82,6 +59,7 @@ public class TUI {
 
         return fila * midaTaulell + columna; // Devolver el índice de la casilla en un solo número
     }
+
 
 
     public void fiDePartida(int guanyador) {

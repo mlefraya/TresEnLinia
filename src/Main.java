@@ -71,8 +71,8 @@ public class Main {
 
 
     public static void modificarMidaTaulell() {
-        int novaMida;
-        novaMida = tui.recollirNovaMidaTaulell();
+        System.out.print("Introduce la nueva medida del tablero (entre 3 y 10, -1 para volver): ");
+        int novaMida = tui.sc.nextInt();
 
         if (novaMida != -1) {
             if (novaMida < 3 || novaMida > 10) {
@@ -84,6 +84,7 @@ public class Main {
             }
         }
     }
+
 
     private static void guardarConfiguracio() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(CONFIG_FILE))) {

@@ -1,21 +1,18 @@
 public class Joc {
-    private char[][] taulell = new char[3][3];
+    private char[][] taulell;
     private int torn;
     private TUI tui = new TUI();
+
+    public int getTorn() {
+        return torn;
+    }
+
     public char[][] getTaulell() {
         return taulell;
     }
 
-    public void setTorn(int torn) {
-        this.torn = torn;
-    }
-
     public void setTaulell(char[][] taulell) {
         this.taulell = taulell;
-    }
-
-    public int getTorn() {
-        return torn;
     }
 
     public void novaPartida(int midaTaulell) {
@@ -30,10 +27,10 @@ public class Joc {
         // Bucle para el desarrollo del juego
         while (true) {
             tui.mostrarTaulell(taulell, midaTaulell, torn);
-// Mostrar el tablero actual
-            int jugada = tui.recollirJugada(midaTaulell) -1; // Recoger la jugada del jugador actual
-            int fila = jugada / 3;
-            int columna = jugada % 3;
+            // Mostrar el tablero actual
+            int jugada = tui.recollirJugada(midaTaulell);
+            int fila = jugada / midaTaulell;
+            int columna = jugada % midaTaulell;
 
             // Realizar la jugada
             jugar(fila, columna);
@@ -45,9 +42,12 @@ public class Joc {
         }
     }
 
-
-
     public void jugar(int fila, int columna) {
+        if (fila < 0 || fila >= taulell.length || columna < 0 || columna >= taulell[0].length) {
+            System.out.println("Fila o columna inválida. Inténtalo de nuevo.");
+            return;
+        }
+
         if (taulell[fila][columna] == ' ') { // Verificar que la casilla esté vacía
             taulell[fila][columna] = (torn == 1) ? 'X' : 'O'; // Colocar la ficha del jugador en la casilla
             torn = (torn == 1) ? 2 : 1; // Cambiar el turno al otro jugador
@@ -56,51 +56,79 @@ public class Joc {
         }
     }
 
-
-
-
     public boolean jugadaGuanyadora(int fila, int columna) {
         char jugador = taulell[fila][columna]; // Obtener el caracter del jugador que hizo la jugada en la casilla especificada
 
-        // Verificar si hay tres fichas del mismo jugador en una fila, columna o diagonal
-        boolean guanyador = (taulell[fila][0] == jugador && taulell[fila][1] == jugador && taulell[fila][2] == jugador) || // Fila
-                (taulell[0][columna] == jugador && taulell[1][columna] == jugador && taulell[2][columna] == jugador) || // Columna
-                (taulell[0][0] == jugador && taulell[1][1] == jugador && taulell[2][2] == jugador) || // Diagonal principal
-                (taulell[0][2] == jugador && taulell[1][1] == jugador && taulell[2][0] == jugador); // Diagonal secundaria
-
-        // Mostrar el tablero antes de indicar si hay un ganador o empate
-        tui.mostrarTaulell(taulell,3, torn);
-
-        // Si hay un ganador, imprimir mensaje y devolver verdadero
-        if (guanyador) {
-            System.out.println("¡Felicidades! El jugador " + jugador + " ha ganado la partida.");
-            return true;
-        }
-
-        // Verificar si hay empate
-        boolean empate = true;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (taulell[i][j] == ' ') {
-                    empate = false; // Si hay una casilla vacía, no hay empate
+        // Verificar si hay tres fichas del mismo jugador en una fila
+        for (int i = 0; i < taulell.length; i++) {
+            int count = 0;
+            for (int j = 0; j < taulell[0].length; j++) {
+                if (taulell[i][j] == jugador) {
+                    count++;
+                } else {
+                    count = 0;
+                }
+                if (count == 3) {
+                    mostrarTableroYMensajeGanador(jugador);
+                    return true;
                 }
             }
         }
 
-        // Si todas las casillas están llenas y no hay un ganador, imprimir mensaje de empate y devolver verdadero
-        if (empate) {
-            System.out.println("La partida ha terminado en empate.");
-            return true;
+        // Verificar si hay tres fichas del mismo jugador en una columna
+        for (int j = 0; j < taulell[0].length; j++) {
+            int count = 0;
+            for (int i = 0; i < taulell.length; i++) {
+                if (taulell[i][j] == jugador) {
+                    count++;
+                } else {
+                    count = 0;
+                }
+                if (count == 3) {
+                    mostrarTableroYMensajeGanador(jugador);
+                    return true;
+                }
+            }
         }
 
-        return false; // Si no hay un ganador ni un empate, devolver falso
+        // Verificar la diagonal principal
+        int countDiagonalPrincipal = 0;
+        for (int i = 0; i < taulell.length; i++) {
+            if (taulell[i][i] == jugador) {
+                countDiagonalPrincipal++;
+            } else {
+                countDiagonalPrincipal = 0;
+            }
+            if (countDiagonalPrincipal == 3) {
+                mostrarTableroYMensajeGanador(jugador);
+                return true;
+            }
+        }
+
+        // Verificar la diagonal secundaria
+        int countDiagonalSecundaria = 0;
+        for (int i = 0; i < taulell.length; i++) {
+            if (taulell[i][taulell.length - 1 - i] == jugador) {
+                countDiagonalSecundaria++;
+            } else {
+                countDiagonalSecundaria = 0;
+            }
+            if (countDiagonalSecundaria == 3) {
+                mostrarTableroYMensajeGanador(jugador);
+                return true;
+            }
+        }
+
+        return false; // Si no hay un ganador, devolver falso
+    }
+
+    private void mostrarTableroYMensajeGanador(char jugador) {
+        tui.mostrarTaulell(taulell, taulell.length, torn);
+        System.out.println("¡Felicidades! El jugador " + jugador + " ha ganado la partida.");
     }
 
 
-
-
 }
-
 
 
 

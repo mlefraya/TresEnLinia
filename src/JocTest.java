@@ -10,10 +10,10 @@ public class JocTest {
         TUI tui = new TUI();
 
         // Act
-        joc.novaPartida(3);
+        joc.novaPartida(5); // Cambiado el tamaño del tablero a 5x5
         char[][] taulell = joc.getTaulell();
         int tornActual = joc.getTorn(); // Obtener el turno actual del jugador
-        int midaTaulell = 3; // Supongamos que el tamaño del tablero es 3
+        int midaTaulell = 5; // Actualizado el tamaño del tablero
 
         // Assert
         assertNotNull(taulell); // Verificar que el tablero no es nulo
@@ -23,15 +23,12 @@ public class JocTest {
         tui.mostrarTaulell(taulell, midaTaulell, tornActual);
 
         // Verificar que todas las celdas del tablero estén vacías
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
                 assertEquals(' ', taulell[i][j]); // Verificar que la celda está vacía
             }
         }
     }
-
-
-
 
     @Test
     public void testJugar() {
@@ -134,5 +131,4 @@ public class JocTest {
         // Assert
         assertTrue(result, "La partida debería acabar en empate");
     }
-
 }
