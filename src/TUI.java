@@ -26,6 +26,11 @@ public class TUI {
 
 
     public void mostrarTaulell(char[][] taulell, int midaTaulell, int torn) {
+        if (taulell == null || taulell.length == 0 || taulell.length != midaTaulell || taulell[0].length != midaTaulell) {
+            System.out.println("Error: El tablero no se ha inicializado correctamente.");
+            return;
+        }
+
         System.out.println("Tablero:");
         for (int i = 0; i < midaTaulell; i++) {
             for (int j = 0; j < midaTaulell; j++) {
@@ -39,26 +44,54 @@ public class TUI {
 
 
 
+
     public int recollirJugada(int midaTaulell) {
         System.out.println("Elige la fila y la columna donde deseas colocar tu ficha (1-" + midaTaulell + ").");
         System.out.print("Fila (1-" + midaTaulell + "): ");
         int fila = sc.nextInt();
 
+        // Verificar si se desea guardar la partida
+        if (fila == -1) {
+            System.out.print("Columna (1-" + midaTaulell + "): ");
+            int columna = sc.nextInt();
+            if (columna == -1) {
+                return -1; // Se desea guardar la partida
+            } else {
+                System.out.println("Para guardar la partida, tanto la fila como la columna deben ser -1. Inténtalo de nuevo.");
+                return recollirJugada(midaTaulell); // Volver a pedir la jugada si la columna no es -1
+            }
+        } else if (fila < 1 || fila > midaTaulell) {
+            System.out.println("Fila inválida. Inténtalo de nuevo.");
+            return recollirJugada(midaTaulell); // Volver a pedir la fila si es inválida
+        }
+
         System.out.print("Columna (1-" + midaTaulell + "): ");
         int columna = sc.nextInt();
 
-        // Ajustar las filas y columnas de 1-midaTaulell a 0-(midaTaulell-1)
-        fila--;
-        columna--;
-
-        // Validar que la fila y la columna estén dentro del rango permitido (0-(midaTaulell-1))
-        if (fila < 0 || fila >= midaTaulell || columna < 0 || columna >= midaTaulell) {
-            System.out.println("Fila o columna inválida. Inténtalo de nuevo.");
-            return recollirJugada(midaTaulell); // Llamada recursiva para obtener una jugada válida
+        if (columna == -1) {
+            return -1; // Se desea guardar la partida
+        } else if (columna < 1 || columna > midaTaulell) {
+            System.out.println("Columna inválida. Inténtalo de nuevo.");
+            return recollirJugada(midaTaulell); // Volver a pedir la columna si es inválida
         }
 
-        return fila * midaTaulell + columna; // Devolver el índice de la casilla en un solo número
+        // Convertir fila y columna a índice de la casilla
+        return ((fila - 1) * midaTaulell) + (columna - 1);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

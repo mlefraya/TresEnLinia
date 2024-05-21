@@ -4,31 +4,30 @@ import static org.junit.jupiter.api.Assertions.*;
 public class JocTest {
 
     @Test
-    public void testNovaPartida() {
+    public void testNovaPartida_TableroInicializado() {
         // Arrange
         Joc joc = new Joc();
-        TUI tui = new TUI();
+        int midaTaulell = 3; // Tamaño del tablero a probar
 
         // Act
-        joc.novaPartida(5); // Cambiado el tamaño del tablero a 5x5
+        joc.novaPartida(midaTaulell); // Inicializar una nueva partida con un tablero de tamaño 3x3
         char[][] taulell = joc.getTaulell();
-        int tornActual = joc.getTorn(); // Obtener el turno actual del jugador
-        int midaTaulell = 5; // Actualizado el tamaño del tablero
 
         // Assert
         assertNotNull(taulell); // Verificar que el tablero no es nulo
 
-        // Mostrar el tablero vacío junto con el turno actual del jugador
-        System.out.println("Tablero Vacío:");
-        tui.mostrarTaulell(taulell, midaTaulell, tornActual);
-
         // Verificar que todas las celdas del tablero estén vacías
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < midaTaulell; i++) {
+            for (int j = 0; j < midaTaulell; j++) {
                 assertEquals(' ', taulell[i][j]); // Verificar que la celda está vacía
             }
         }
     }
+
+
+
+
+
 
     @Test
     public void testJugar() {
@@ -53,9 +52,9 @@ public class JocTest {
 
     @Test
     public void testJugadaGuanyadora_GanadorEnFila() {
-        // Arrange
-        Joc joc = new Joc();
-        char[][] taulell = {
+            // Arrange
+            Joc joc = new Joc();
+            char[][] taulell = {
                 {'X', 'X', 'X'},
                 {' ', 'O', ' '},
                 {'O', ' ', 'O'}
@@ -112,6 +111,7 @@ public class JocTest {
     }
 
 
+
     @Test
     public void testJugadaGuanyadora_Empate() {
         // Arrange
@@ -129,6 +129,7 @@ public class JocTest {
         boolean result = joc.jugadaGuanyadora(fila, columna);
 
         // Assert
-        assertTrue(result, "La partida debería acabar en empate");
+        assertFalse(result, "La partida no debería haber acabado en victoria");
     }
+
 }
